@@ -1,0 +1,6 @@
+SECRET_KEY = 'django-insecure-79lez!b_-z!&x9&396xe7fkctq&=e-plmwr9@u_&td-8%7469$'
+DATABASE_NAME = mydb
+DATABASE_USER = aadmin
+DATABASE_PASSWORD = password
+DATABASE_HOST = 127.0.0.1
+DATABASE_PORT = 5432
