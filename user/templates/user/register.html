@@ -1,3 +1,6 @@
+
+<!-- new user registartion form -->
+
 <h1>Register Here</h1>
 <form method ="POST">
     {%csrf_token%}
@@ -9,10 +12,7 @@
           {% endfor %}
          
         {% endfor %}
-
-    
-   
        <button type="submit" >Register</button>
 
 </form>
-<p>click here to login <a href="{% url 'login' %}">LOgin Here</a></p>
+<p>click here to login <a href="{% url 'login' %}">Login Here</a></p>
