@@ -1,0 +1,18 @@
+<h1>Register Here</h1>
+<form method ="POST">
+    {%csrf_token%}
+   
+       {% for f in form %}
+         <p>{{f.label}} <br> {{f}}</p>
+         {% for error in f.errors %}
+           <small>{{error}}</small>
+          {% endfor %}
+         
+        {% endfor %}
+
+    
+   
+       <button type="submit" >Register</button>
+
+</form>
+<p>click here to login <a href="{% url 'login' %}">LOgin Here</a></p>
