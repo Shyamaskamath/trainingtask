@@ -7,17 +7,31 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.shortcuts import redirect
 
-class HomePageView(LoginRequiredMixin,TemplateView):
-    """view for home page"""
-    template_name = 'user/home.html'
+
+class AdminHomePageView(TemplateView):
+    """view for home page for adminstaff """
+    template_name = 'user/adminhome.html'
+
+    @method_decorator(staff_member_required,login_required)
+    def dispatch(self,  *args, **kwargs): 
+        return super().dispatch( *args, **kwargs)
+
 
 class RegisterationFormView(generic.CreateView):
     """ view for user registeration """
     template_name = 'user/register.html'
     form_class = UserRegistrationForm
     success_url = reverse_lazy("login")
-
+    @method_decorator(staff_member_required)
+    def dispatch(self,  *args, **kwargs): 
+        return super().dispatch( *args, **kwargs)
+    
 class LoginView(FormView):
     """view for user login"""
     form_class = AuthenticationForm
