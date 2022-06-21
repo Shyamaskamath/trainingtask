@@ -1,0 +1,16 @@
+=.idea/
+*.pyc
+*.log
+*.pid
+*.dump
+static/
+.env
+db.sqlite3
+.python-version
+.coverage
+coverage.xml
+venv/
+dotenv.sample
+requirements.txt
+venv/
+

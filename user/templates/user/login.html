@@ -1,0 +1,26 @@
+
+
+<!-- login form  -->
+<h1>Welcome to our site!</h1>
+<form method ="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+ {% if form.non_field_errors %}
+ {% for error in form.non_field_errors %}
+ {{ error }}
+ {% endfor %}
+ {% endif %} 
+<br>
+    <input type="submit" value="login">
+
+</form>
+ 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+</ul>
+{% endif %}
