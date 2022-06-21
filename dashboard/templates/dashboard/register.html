@@ -1,0 +1,12 @@
+<!-- new creation  form -->
+<h1>new User Creation form</h1>
+<form method ="POST">
+    {%csrf_token%}
+       {% for f in form %}
+         <p>{{f.label}} <br> {{f}}</p>
+         {% for error in f.errors %}
+           <small>{{error}}</small>
+          {% endfor %}
+        {% endfor %}
+       <button type="submit" >Create User</button>
+</form>
