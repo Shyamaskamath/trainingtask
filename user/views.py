@@ -25,7 +25,7 @@ class LoginView(FormView):
 
     
     def form_valid(self,form):
-        """Override method"""
+        """Override method """
         login(self.request,form.get_user())
         return HttpResponseRedirect(self.get_success_url())
 

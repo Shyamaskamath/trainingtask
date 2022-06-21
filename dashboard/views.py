@@ -9,9 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import views as auth_view, REDIRECT_FIELD_NAME, logout
 from django.urls import path
-
-
 # Create your views here.
+
 class StaffRequiredMixin(AccessMixin):
     """Verify that the current user is admin """
 

@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 def validateemail(value):
     """checking if given email alreday taken or not"""
     if User.objects.filter(email = value).exists():
-        raise ValidationError((f"{value} is taken."),params = {'value':value})
+        raise ValidationError((f"{value} is taken!"),params = {'value':value})
 
 class UserRegistrationForm(UserCreationForm):
     """Registartion  form"""
