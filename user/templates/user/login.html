@@ -1,9 +1,32 @@
 <!-- login form -->
-<h1>Welcome to our site!</h1>
-<form method ="POST">
+
+{% extends 'user/base.html'%}
+{% load static %}
+{% block sub_title %}Login{% endblock sub_title %}
+{%block content%}
+<h2>WarrantyApp</h2>
+<br>
+<form method="POST">
     {% csrf_token %}
     {{form.as_p}}
+
+    <br>
     <input type="submit" value="login">
-    <p>{{message}}</p>
+
 </form>
-<p>Don't Have account please Signup here <a href="{% url 'signup' %}">Register Here</a></p>
+{% if form.non_field_errors %}
+
+  <small>{{ error }}<small></small>
+
+{% endif %}
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+            <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+    </ul>
+{% endif %}
+ {%endblock%}
