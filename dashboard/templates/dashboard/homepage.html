@@ -1,0 +1,17 @@
+{% extends 'dashboard/base.html'%}
+{% load static %}
+{% block sub_title %}Home Page{% endblock sub_title %}
+{%block content%}
+<div class="row mt-5 p-3">
+    <div class="col-4">
+        <button type="button" class="btn btn-success"><a href="{% url 'createuser' %}">Create User</a></button>
+     </div>
+     <div class="col-4">
+     
+    </div>
+    <div class="col-4">
+       
+    </div>
+    
+  </div>
+{% endblock%}
