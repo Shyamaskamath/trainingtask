@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.views import generic
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy, reverse
-from .forms import UserCreationForm
+from .forms import NewUserCReationForm
 from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import views as auth_view, REDIRECT_FIELD_NAME, logout
@@ -17,8 +17,7 @@ class StaffRequiredMixin(AccessMixin):
         if not  request.user.is_staff:
 
             messages.add_message(request, level=messages.ERROR,
-                                 message="Please login as Admin to see "
-                                         "the requested page.")
+                                 message="Please login as Admin to see the  page.")
             logout(request)
             return redirect_to_login(
                 path,
@@ -36,7 +35,7 @@ class HomePageView(StaffRequiredMixin,LoginRequiredMixin,TemplateView):
 class RegisterationFormView(StaffRequiredMixin,LoginRequiredMixin,generic.CreateView):
     """ view for user creation  """
     template_name = 'dashboard/usercreation.html'
-    form_class = UserCreationForm
+    form_class = NewUserCReationForm
     success_url = reverse_lazy("home")
     
     

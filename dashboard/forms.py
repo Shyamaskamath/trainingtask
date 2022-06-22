@@ -5,17 +5,16 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 def validateemail(value):
-    """checking if given email alreday taken or not"""
+    """checking if given email alreday taken """
     if User.objects.filter(email = value).exists():
         raise ValidationError((f"{value} is taken!"),params = {'value':value})
 
-class UserCreationForm(UserCreationForm):
-    """Registartion  form"""
+class NewUserCReationForm(UserCreationForm):
+    """User Creation form"""
     email = forms.EmailField(validators = [validateemail])
     is_staff = forms.BooleanField(required=False)
 
     class Meta:
-        """overridig the meta class"""
         model = User
         fields = ['username','email','password1','password2','is_staff']
         
