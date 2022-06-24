@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.views import generic
 from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from .forms import NewUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
@@ -13,8 +13,7 @@ from django.urls import path
 class StaffRequiredMixin(AccessMixin):
     """Verify that the current user is admin """
     def dispatch(self, request, *args, **kwargs):
-        if not  request.user.is_staff:
-
+        if not request.user.is_staff:
             messages.add_message(request, level=messages.ERROR,
                                  message="Please login as Admin to see the  page.")
             logout(request)

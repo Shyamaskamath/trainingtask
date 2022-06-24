@@ -1,19 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from .roles import *
 
 
-roles = [
-  ('admin','admin'),
-  ('staff','staff')
-]
 
 class CustomUserManager(BaseUserManager):
     """custom manager for custom usermodel  """
     def create_user(self, email, username, password=None):
         user = self.model( email=self.normalize_email(email),
             username=username)
-        # password = User.objects.make_random_password()
         password = "Warrantyapp@12"
         user.set_password(password)
         user.save(using=self._db)

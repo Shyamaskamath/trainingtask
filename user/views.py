@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views import generic
-from .forms import NewUserCreationForm
+from dashboard.forms import NewUserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.views.generic import TemplateView
