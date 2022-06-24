@@ -1,9 +1,12 @@
+from dataclasses import field
 from email.policy import default
+from enum import unique
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model   
 from django.core.exceptions import ValidationError
 from user.roles import *
+from user.models import Products,ProductImage
 
 def validatemail(value):
     """checking if given email alreday taken """
@@ -21,3 +24,11 @@ class NewUserCreationForm(UserCreationForm):
         model = get_user_model() 
         fields = ['email']
         
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Products
+        fields = ['title','itemno','descriptions']
+
+class ProductImageForm(forms.ModelForm):
+    model = ProductImage
+    fields = ['image']

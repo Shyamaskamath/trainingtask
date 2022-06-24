@@ -1,0 +1,16 @@
+{% extends 'dashboard/base.html'%}
+{% load static %}
+{% block sub_title %}Home Page{% endblock sub_title %}
+{%block content%}
+
+
+
+<div class="card-body">
+
+    {{products.title}}<br>
+    {{products.itemno}}<br>
+    {{products.description}}
+    <!-- //image -->
+</div>
+
+{%endblock%}

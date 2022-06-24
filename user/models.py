@@ -49,3 +49,14 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+
+class Products(models.Model):
+    title = models.CharField(max_length=20)
+    itemno = models.CharField(max_length=8,unique=True)
+    descriptions = models.TextField()
+
+
+class ProductImage(models.Model):
+    product= models.ForeignKey(Products, on_delete=models.CASCADE)
+    image = models.ImageField()
