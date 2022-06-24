@@ -1,20 +1,23 @@
 from email.policy import default
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model   
 from django.core.exceptions import ValidationError
+from user.roles import *
 
-def validateemail(value):
+def validatemail(value):
     """checking if given email alreday taken """
+    User = get_user_model() 
     if User.objects.filter(email = value).exists():
         raise ValidationError((f"{value} is taken!"),params = {'value':value})
 
-class NewUserCReationForm(UserCreationForm):
-    """User Creation form"""
-    email = forms.EmailField(validators = [validateemail])
-    is_staff = forms.BooleanField(required=False)
-
+class NewUserCreationForm(UserCreationForm):
+    """User Creation form """
+    email = forms.EmailField(validators = [validatemail])
+    roles = forms.ChoiceField(choices=roles)
+    password1 = forms.CharField(widget = forms.HiddenInput(), required = False)
+    password2 = forms.CharField(widget = forms.HiddenInput(), required = False)
     class Meta:
-        model = User
-        fields = ['username','email','password1','password2','is_staff']
+        model = get_user_model() 
+        fields = ['email']
         
