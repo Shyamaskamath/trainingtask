@@ -1,13 +1,45 @@
-<!-- new user registartion form -->
-
-<h1>Register Here</h1>
-<form method ="POST">
-    {%csrf_token%}
-       {% for f in form %}
-         <p>{{f.label}} <br> {{f}}</p>
-         {% for error in f.errors %}
-           <small>{{error}}</small>
-          {% endfor %}
-        {% endfor %}
-       <button type="submit" >Register</button>
+<!-- user creation form -->
+{% extends 'dashboard/base.html'%}
+{% load static %}
+{% block sub_title %} | Update Page{% endblock sub_title %}
+{%block content%}
+<div class="row mt-5 p-4">
+    <div class="col-4">
+      
+    </div>   
+<div class="col-4">
+<div class="card" style="width: 30rem;">
+    <div class="card-body">
+      <h3>Invite a user</h3>
+     
+<form method="POST">
+  {%csrf_token%}
+  {% for field in form.hidden_fields %}
+    {{ field }}
+  {% endfor %}
+  {% for f in form %}
+     {% for error in f.errors %}
+     <small>{{error}}</small>
+  {% endfor %}
+  {% endfor %}
+     {% for field in form.visible_fields %}
+        <p>{{ field.label }} <br>{{ field }}</p>
+      {% endfor %}
+  <button type="submit">Create</button>
 </form>
+    </div>
+  </div>
+</div>
+<div class="col-4">
+    
+</div>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

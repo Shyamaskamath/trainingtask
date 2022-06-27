@@ -1,0 +1,29 @@
+{% extends 'dashboard/base.html'%}
+{% load static %}
+{% block sub_title %} | Home Page{% endblock sub_title %}
+{%block content%}
+
+<div class="container mt-5">
+    <div class="row mt-3 p-2">
+      {% for item in products %}
+        <div class="col-4 mt-3">
+            <div class="card" style="width: 18rem;">
+             <a href="{% url 'productdetails' item.id %}"><img src="{{item.image.url}}" alt="" class="img-fluid" style="height: 2000; object-fit: cover;"></a>
+                <div class="card-body">
+                  <h5 class="card-title">{{item.title}}</h5>
+                   <a href="{% url 'productdetails' item.id %}" class="btn btn-primary">view </a>
+                   {%  if adminusers in user.groups or user.is_superuser %}
+                    <a href="{% url 'updateproduct' item.id %}" class="btn btn-primary">edit </a>
+                    <a href= "{% url 'deleteproduct' item.id %}" class="btn btn-primary">delete</a>
+                   {% endif %}
+                </div>
+              </div>
+        </div>
+       {%endfor%}
+</div>
+</div>
+{% endblock %}
+
+    
+    
+   

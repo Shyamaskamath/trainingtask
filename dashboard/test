@@ -1,0 +1,108 @@
+from django.http import Http404
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.views import generic
+from .forms import ProductForm
+from django.views.generic.edit import CreateView,DeleteView,UpdateView
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth import views as auth_view, REDIRECT_FIELD_NAME, logout
+from django.urls import path
+from user.models import CustomUser, Products,ProductImage
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.utils.translation import gettext_lazy as _
+
+# Create your views here.
+
+class StaffRequiredMixin(AccessMixin):
+    """Verify that the current user is admin """
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.add_message(request, level=messages.ERROR,
+                                 message="Please login as Admin to see the  page.")
+            logout(request)
+            return redirect_to_login(
+                path,
+                login_url=reverse_lazy('login'),
+                redirect_field_name=REDIRECT_FIELD_NAME,
+            )
+        return super().dispatch(request, *args, **kwargs)
+
+class ProductListView(LoginRequiredMixin,ListView):
+    model = Products
+    context_object_name = "products" 
+    template_name = "dashboard/productlist.html"
+   
+class ProductDetailView(LoginRequiredMixin,DetailView):
+    model = Products
+    context_object_name = "products"
+    template_name = "dashboard/productdetail.html" 
+    
+class AddProductView(StaffRequiredMixin,LoginRequiredMixin,CreateView):
+    model = Products
+    form_class = ProductForm
+    template_name = "dashboard/addproduct.html"
+    success_url = reverse_lazy('home')
+    # permission_required = 'dashboard.add_products'
+    def form_valid(self, form):
+        p = form.save()
+        images = self.request.FILES.getlist("more_images")
+        for i in images:
+            ProductImage.objects.create(product=p, image=i)
+        return super().form_valid(form)
+    
+# class ProductUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
+#     model = Products
+#     form_class = ProductForm
+#     template_name = "dashboard/productupdate.html"
+#     success_url = reverse_lazy('home')
+#     permission_required = 'dashboard.change_products'
+    
+class ProductDeleteView(StaffRequiredMixin,LoginRequiredMixin, DeleteView):
+    model = Products
+    context_object_name = 'products'
+    template_name = "dashboard/deleteproduct.html"
+    success_url = reverse_lazy('home')
+    permission_required = 'dashboard.delete_products'
+
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from user.roles import *
+from .models import CustomUser
+from django.contrib.auth.models import Group
+
+def validatemail(value):
+    """checking if given email alreday taken """
+    User = get_user_model() 
+    if User.objects.filter(email = value).exists():
+        raise ValidationError((f"{value} is taken!"),params = {'value':value})
+
+class InviteUserForm(UserCreationForm):
+    """User Creation form """
+    email = forms.EmailField(validators = [validatemail])
+    groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),widget = forms.CheckboxSelectMultiple())
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput)
+    password1 = forms.CharField(widget = forms.HiddenInput(), required = False)
+    password2 = forms.CharField(widget = forms.HiddenInput(), required = False)
+    class Meta:
+        model = CustomUser
+        fields = ['email','groups']
+
+    def save(self,commit=True):
+        user = CustomUser.objects.create(
+            email = self.cleaned_data.get('email'),
+        )
+        
+        user.set_password(self.cleaned_data.get('password'))
+        user.groups.add(self.cleaned_data.get('groups')[0].id)
+        print(self.cleaned_data)
+        user.save()
+        return user
+
+    
