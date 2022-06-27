@@ -44,6 +44,7 @@ class ProductUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     success_url = reverse_lazy('home')
     permission_required = 'dashboard.change_products'
     
+    
 
 class ProductDeleteView(PermissionRequiredMixin,LoginRequiredMixin, DeleteView):
     """ view to delete the products """

@@ -13,7 +13,7 @@ def validatemail(value):
         raise ValidationError((f"{value} is taken!"),params = {'value':value})
 
 class InviteUserForm(UserCreationForm):
-    """User Creation form """
+    """User Creation form  """
     email = forms.EmailField(validators = [validatemail])
     groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),widget = forms.CheckboxSelectMultiple())
     password = forms.CharField(max_length=20, widget=forms.PasswordInput)
