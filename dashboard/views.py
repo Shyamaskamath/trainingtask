@@ -1,12 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ProductForm
+from .forms import ProductForm,ProductEditForms,ProductImage
 from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import redirect_to_login
-from user.models import CustomUser, Products,ProductImage
+from user.models import Products,ProductImage
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404,render
+from django.forms import modelformset_factory
+from django.http import HttpResponse
+
 
 # Create your views here.
 
@@ -39,12 +42,10 @@ class AddProductView(PermissionRequiredMixin,LoginRequiredMixin,CreateView):
 class ProductUpdateView(PermissionRequiredMixin,LoginRequiredMixin,UpdateView):
     """  view for updating the product details"""
     model = Products
-    form_class = ProductForm
+    form_class = ProductEditForms
     template_name = "dashboard/productupdate.html"
     success_url = reverse_lazy('home')
     permission_required = 'dashboard.change_products'
-    
-    
 
 class ProductDeleteView(PermissionRequiredMixin,LoginRequiredMixin, DeleteView):
     """ view to delete the products """

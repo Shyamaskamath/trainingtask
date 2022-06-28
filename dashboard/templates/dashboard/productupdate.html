@@ -11,6 +11,12 @@
         <form  enctype='multipart/form-data' method="POST">
             {% csrf_token%}
             {{form.as_p}}
+            {{formset.management_form}}
+        
+            {% for f in formset %}
+                {{f.as_p}}
+            {% endfor %}
+
            <input type="submit" value="update">
         </form>
     </div>
