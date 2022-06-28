@@ -5,17 +5,21 @@ from .models import CustomUser,ProductImage,Products
 @admin .register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     """ registering and creating view to dispaly  table in admin """
-    list_display = ['email','roles','is_staff','is_admin','is_superuser',]
+    list_display = ['email','roles','is_staff','is_admin','is_superuser']
 
 
-@admin .register(Products)
+
+class ProductImageAdmin(admin.StackedInline):
+    model = ProductImage
+
+@admin.register(Products)
 class ProductAdmin(admin.ModelAdmin):
-    """ registering and creating view to dispaly  table in admin """
-    list_display = ['title','itemno','descriptions','image']
+    inlines = [ProductImageAdmin]
 
-@admin .register(ProductImage)
-class ProductImage(admin.ModelAdmin):
-    """ registering and creating view to dispaly  table in admin """
-    list_display = ['id']  
+    class Meta:
+       model = Products
+       
 
-
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    pass

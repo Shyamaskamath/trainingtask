@@ -53,10 +53,18 @@ class Products(models.Model):
     descriptions = models.TextField()
     image = models.ImageField(blank =True)
 
+    def __str__(self) -> str:
+        return self.title ,self.itemno,self.descriptions,self.image
+
+
 class ProductImage(models.Model):
     """ model for the storing multiple images for product  """
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="products/images/")
+
+    def __str__(self) -> str:
+        return self.products.title ,self.image
+
 
 
 
