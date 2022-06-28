@@ -1,4 +1,4 @@
 roles = [
   ('admin','admin'),
-  ('staff','staff')
+  ('customer','customer')
 ]

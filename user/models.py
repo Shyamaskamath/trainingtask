@@ -3,14 +3,11 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from .roles import *
 
-
-
 class CustomUserManager(BaseUserManager):
     """custom manager for custom usermodel  """
     def create_user(self, email, username, password=None):
         user = self.model( email=self.normalize_email(email),
             username=username)
-        password = "Warrantyapp@12"
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -24,7 +21,6 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
-        user.roles = 'admin'
         user.save(using=self._db)
         return user
 
@@ -39,7 +35,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    roles = models.CharField(max_length=10,choices=roles,default='staff')
+    roles = models.CharField(max_length=10,choices=roles,null=True,blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -49,3 +45,22 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+class Products(models.Model):
+    """ model for the product """
+    title = models.CharField(max_length=20)
+    itemno = models.CharField(max_length=8,unique=True)
+    descriptions = models.TextField()
+    image = models.ImageField(blank =True)
+
+    
+
+class ProductImage(models.Model):
+    """ model for the storing multiple images for product  """
+    products = models.ForeignKey(Products, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="products/images/")
+
+   
+
+
+

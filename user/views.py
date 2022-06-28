@@ -1,6 +1,8 @@
-from django.http import HttpResponseRedirect
+from re import I
+from django import http
+from django.http import Http404, HttpResponseRedirect
 from django.views import generic
-from dashboard.forms import NewUserCreationForm
+from .forms import InviteUserForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.views.generic import TemplateView
@@ -8,15 +10,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import AuthenticationForm
 
-class HomePageView(LoginRequiredMixin,TemplateView):
-    """view for home page"""
-    template_name = 'user/home.html'
-
-class RegisterationFormView(generic.CreateView):
+class RegisterationFormView(LoginRequiredMixin,generic.CreateView):
     """ view for user registeration """
     template_name = 'user/register.html'
-    form_class = NewUserCreationForm
-    success_url = reverse_lazy("login")
+    form_class = InviteUserForm
+    success_message = "user was created successfully"
+    success_url = reverse_lazy("home")
 
 class LoginView(FormView):
     """view for user login"""
