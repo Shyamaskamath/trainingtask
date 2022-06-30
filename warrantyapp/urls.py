@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('user.urls')),
-    path('home/',include('dashboard.urls')),
+    path('home/',include('myapp.urls')),
     path('logout/',auth_views.LogoutView.as_view(next_page="login"), name='logout'),
    
    

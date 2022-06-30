@@ -1,0 +1,40 @@
+{% extends 'myapp/base.html'%}
+{% load static %}
+{% block sub_title %}|People {% endblock sub_title %}
+{% block content %}
+<div class="row p-5">
+     <div class="col">
+
+     </div>
+     <div class="col">
+
+     </div>
+     <div class="col">
+       {% if user.is_staff or user.is_superuser %}
+          <a href="{% url 'createuser'  %}" style="float: right" class="btn btn-primary">Invite User</a>
+        {% endif %}
+     </div>
+</div>
+<div class="row ">
+     <div class="col">
+     <h1>customers</h1>
+     {% for i in customer %}
+     <div class="card" style="width: 18rem;">
+          <div class="card-body">
+               <h6 class="card-title"> {{ i.email}}</h6>
+          </div>
+     </div>
+     {% endfor %}
+</div>
+<div class="col">
+     <h1>Staff</h1>
+     {% for i in admin %}
+     <div class="card" style="width: 18rem;">
+          <div class="card-body">
+               <h6 class="card-title"> {{ i.email}}</h6>
+          </div>
+     </div>
+     {% endfor %}
+</div>
+</div>
+{% endblock %}

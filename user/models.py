@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from .roles import *
 
+
 class CustomUserManager(BaseUserManager):
     """custom manager for custom usermodel  """
     def create_user(self, email, username, password=None):
@@ -45,21 +46,6 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
-
-class Products(models.Model):
-    """ model for the product """
-    title = models.CharField(max_length=20)
-    itemno = models.CharField(max_length=8,unique=True)
-    descriptions = models.TextField()
-    image = models.ImageField(blank =True)
-
-    
-
-class ProductImage(models.Model):
-    """ model for the storing multiple images for product  """
-    products = models.ForeignKey(Products, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="products/images/")
-
    
 
 

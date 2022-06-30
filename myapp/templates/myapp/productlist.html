@@ -1,0 +1,49 @@
+{% extends 'myapp/base.html'%}
+{% load static %}
+{% block sub_title %}| Products{% endblock sub_title %}
+{% block content %}
+<div class="row p-3">
+  <div class="col">
+
+  </div>
+  <div class="col">
+
+  </div>
+  <div class="col">
+    {% if user.is_staff  %}
+      <a href="{% url 'addproduct'  %}" style="float: right" class="btn btn-primary">Add Product</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row">
+  {% for i in product %}
+  <div class="col-mb-2">
+    <div class="card mt-5" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title"> {{i.title}}</h5>
+
+        {% for j in i.images.all %}
+        {% if forloop.counter == 1 %}
+        <hr>
+        <a href="{% url 'details' i.id %}"><img src="{{ j.image.url }}" alt="" width="200" title="" /></a>
+        <hr>
+        {% endif %}
+        {% endfor %}
+
+        <h6 class="card-subtitle"><b>Itemno : </b>{{i.itemno}}</h6><br>
+        <a href="{% url 'details' i.id %}" class="btn btn-primary">view</a>
+        {% if user.is_staff  %}
+        <a href="{% url 'editproduct' i.id %}" class="btn btn-primary">edit </a>
+        <a href="{% url 'deleteproduct' i.id %}" class="btn btn-primary">delete</a>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}
