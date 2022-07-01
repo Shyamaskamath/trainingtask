@@ -4,7 +4,7 @@ from .models import ProductImage, Product
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import DeleteView,FormView
+from django.views.generic.edit import DeleteView,FormView,UpdateView
 from django.urls import reverse_lazy,reverse
 from django.contrib.auth.mixins import LoginRequiredMixin,AccessMixin
 from django.views.generic import TemplateView, CreateView
@@ -90,19 +90,32 @@ class AddProductView(LoginRequiredMixin,StaffRequiredMixin,CreateView):
         else:
             print(productform.errors, formset.errors)                              
 
+class ProductEditView(LoginRequiredMixin,StaffRequiredMixin,UpdateView):
+    """view to update product details"""
+    template_name = "myapp/edit.html"
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('productlist')
 
-@login_required(login_url='login')
-@staff_member_required(login_url='login')
-def editview(request,pk):
-    product = get_object_or_404(Product,pk=pk)
-    if request.method == 'POST':
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        print(self.object.id)
+        form = ProductEditForm(instance=self.object)
+        formset =  ImageFormSet(queryset=ProductImage.objects.filter(product= self.object))
+        context = {
+            'form': form,
+            'formset':formset,
+        }
+        
+        return render(request,'myapp/edit.html',context)
+
+    def post(self, request, *args, **kwargs): 
+        product = self.get_object()
         form = ProductEditForm(request.POST,instance=product)
         formset =  ImageFormSet(request.POST or None, request.FILES or None)
         if form.is_valid() and formset.is_valid():
             form.save()
-            # print(formset.cleaned_data)
             existing_images = ProductImage.objects.filter(product=product)
-            print(existing_images)
             for index,f in enumerate(formset):
                 if f.cleaned_data:
                     if f.cleaned_data['id'] is None:
@@ -116,16 +129,5 @@ def editview(request,pk):
                         data = ProductImage.objects.get(id=existing_images[index].id)
                         data.image = photo.image
                         data.save()
-        return HttpResponseRedirect(product.get_absolute_url())
-                           
-    form = ProductEditForm(instance=product)
-    formset =  ImageFormSet(queryset=ProductImage.objects.filter(product=product))
-    context = {
-        'form': form,
-        'formset':formset,
-        'product':product
-        
-    }
-    
-    return render(request,'myapp/edit.html',context)
-    
+            return HttpResponseRedirect(product.get_absolute_url()) 
+            

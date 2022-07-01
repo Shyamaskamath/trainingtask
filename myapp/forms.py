@@ -18,6 +18,7 @@ class ProductEditForm(forms.ModelForm):
     """form to edit product detais"""
     class Meta:
         model = Product
-        fields = '__all__'
-
-ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=3)
+        fields = ['title','itemno','description']
+        
+"""formset  to store 3 image per product """
+ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=3,max_num=3,min_num=0)
