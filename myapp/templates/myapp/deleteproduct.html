@@ -12,8 +12,8 @@
                 <form method="POST">
                     {% csrf_token %}
                     <p>Are your sure you want to delete this product "{{product.title}}" ? </p>
-                    {% for i in product.images.all %}
-                    <a href="{{ i.url }}"><img src="{{ i.image.url }}" alt="" width="200" title="" /></a>
+                    {% for productimage in product.images.all %}
+                    <a href="{{ productimage.url }}"><img src="{{ productimage.image.url }}" alt="" width="200" title="" /></a>
                     {% endfor %}
                     <p><b>Item no:</b>{{product.itemno}}</p>
                     <p><b>Product Details</b>{{product.description}}</p>

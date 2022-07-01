@@ -13,4 +13,5 @@ venv/
 media/
 */migrations
 myproduct
-dashboard/
+dashboard
+warrantyapp/dashboard/*

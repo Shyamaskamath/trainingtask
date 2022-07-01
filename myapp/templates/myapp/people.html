@@ -18,20 +18,20 @@
 <div class="row ">
      <div class="col">
      <h1>customers</h1>
-     {% for i in customer %}
+     {% for customeruser in customer %}
      <div class="card" style="width: 18rem;">
           <div class="card-body">
-               <h6 class="card-title"> {{ i.email}}</h6>
+               <h6 class="card-title"> {{ customeruser.email}}</h6>
           </div>
      </div>
      {% endfor %}
 </div>
 <div class="col">
      <h1>Staff</h1>
-     {% for i in admin %}
+     {% for adminuser in admin %}
      <div class="card" style="width: 18rem;">
           <div class="card-body">
-               <h6 class="card-title"> {{ i.email}}</h6>
+               <h6 class="card-title"> {{ adminuser.email}}</h6>
           </div>
      </div>
      {% endfor %}

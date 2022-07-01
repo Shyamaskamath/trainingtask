@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'myapp',
-     'crispy_forms',
+    'crispy_forms',
     
 ]
 AUTH_USER_MODEL = 'user.CustomUser'
