@@ -88,7 +88,7 @@ class AddProductView(LoginRequiredMixin,StaffRequiredMixin,CreateView):
                     ProductImage.objects.create(image=image, product=p)
             return redirect("productlist")
         else:
-            print(productform.errors, formset.errors)                              
+            print(productform.errors, formset.errors)   
 
 class ProductEditView(LoginRequiredMixin,StaffRequiredMixin,UpdateView):
     """view to update product details"""
@@ -114,20 +114,12 @@ class ProductEditView(LoginRequiredMixin,StaffRequiredMixin,UpdateView):
         form = ProductEditForm(request.POST,instance=product)
         formset =  ImageFormSet(request.POST or None, request.FILES or None)
         if form.is_valid() and formset.is_valid():
-            form.save()
-            existing_images = ProductImage.objects.filter(product=product)
-            for index,f in enumerate(formset):
-                if f.cleaned_data:
-                    if f.cleaned_data['id'] is None:
-                        product = ProductImage(product=product,image=f.cleaned_data['image'])
-                        product.save()
-                    elif f.cleaned_data['image'] is False:
-                        photo = ProductImage.objects.get(id=request.POST.get('form-'+str(index)+'-id'))
-                        photo.delete()
-                    else:
-                        photo = ProductImage(product=product,image=f.cleaned_data['image'])
-                        data = ProductImage.objects.get(id=existing_images[index].id)
-                        data.image = photo.image
-                        data.save()
-            return HttpResponseRedirect(product.get_absolute_url()) 
+            form.save() 
+            for image in formset.forms:
+                if image.is_valid():
+                    if image.cleaned_data.get('image'):
+                        image.instance.product = product
+                        image.instance.save()
+                        image.save()   
+        return HttpResponseRedirect(product.get_absolute_url()) 
             
