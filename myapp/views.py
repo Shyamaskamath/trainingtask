@@ -91,7 +91,7 @@ class AddProductView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
                     ProductImage.objects.create(image=image, product=p)
             return redirect("productlist")
         else:
-            print(productform.errors, formset.errors)
+            return render(request, 'myapp/productcreate.html', {"productform": productform, "formset": formset})
 
 class ProductEditView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     """view to update product details"""

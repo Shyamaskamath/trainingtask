@@ -3,7 +3,7 @@
 
 {% block sub_title %}| Product EditForm{% endblock sub_title %}
 {% block content %}
-<div class="card" style="width: 30rem; align-items:center ;">
+<div class="card" style="width: 40rem; align-items:center ;">
     <div class="card-body">
       <h5 class="card-title"></h5>
     <form method="POST"   enctype="multipart/form-data">
@@ -14,9 +14,14 @@
         {% for f in formset %}
             {{f.as_p}}
         {% endfor %}
-        <input type="submit"  class="btn btn-primary mt-1" >
+        {% for error in formset.errors %}
+        {{ error }}<br/>
+    {% endfor %}
+   
+     <input type="submit"  class="btn btn-primary mt-1" >
         
     </form>
+    
 </div>
 </div>
 {% endblock %}

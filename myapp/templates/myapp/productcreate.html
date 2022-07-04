@@ -11,16 +11,19 @@
         {% csrf_token %}
 
         {{ productform.as_p}}
-        
-
+      
         {{ formset.management_form }}
         {% for form in formset %}
         {{ form.as_p }}
         {% endfor %}
+        {% for error in productform.errors %}
+             {{error}}
+        {% endfor %}
 
         <input type="submit" name="submit" value="Submit" />
     </form>
-  
+
+
 </div>
 </div>
 {% endblock %}
