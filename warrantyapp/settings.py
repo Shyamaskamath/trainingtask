@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'user',
-    'dashboard',
-   
+    'myapp',
+    'crispy_forms',
+    
 ]
 AUTH_USER_MODEL = 'user.CustomUser'
 

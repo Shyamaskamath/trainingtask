@@ -15,13 +15,13 @@ class RegisterationFormView(LoginRequiredMixin,generic.CreateView):
     template_name = 'user/register.html'
     form_class = InviteUserForm
     success_message = "user was created successfully"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("peoplepage")
 
 class LoginView(FormView):
     """view for user login"""
     form_class = AuthenticationForm
     template_name = "user/login.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("homepage")
     
     def form_valid(self,form):
         """Override method"""

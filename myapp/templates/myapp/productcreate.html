@@ -1,0 +1,30 @@
+<!-- ProductCreation template -->
+{% extends 'myapp/base.html'%}
+{% load static %}
+{% block sub_title %}| ProductCreateForm{% endblock sub_title %}
+{% block content %}
+<div class="card" style="width: 30rem; align-items:center ;">
+    <div class="card-body">
+      <h5 class="card-title"></h5>
+      <form id="pet_form" method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ productform.as_p}}
+      
+        {{ formset.management_form }}
+        {% for form in formset %}
+        {{ form.as_p }}
+        {% endfor %}
+        {% for error in productform.errors %}
+             {{error}}
+        {% endfor %}
+
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+
+
+</div>
+</div>
+{% endblock %}
+

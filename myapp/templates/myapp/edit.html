@@ -1,0 +1,27 @@
+{% extends 'myapp/base.html'%}
+{% load static %}
+
+{% block sub_title %}| Product EditForm{% endblock sub_title %}
+{% block content %}
+<div class="card" style="width: 40rem; align-items:center ;">
+    <div class="card-body">
+      <h5 class="card-title"></h5>
+    <form method="POST"   enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        {{formset.management_form}}
+        
+        {% for f in formset %}
+            {{f.as_p}}
+        {% endfor %}
+        {% for error in formset.errors %}
+        {{ error }}
+        {% endfor %}
+   
+     <input type="submit"  class="btn btn-primary mt-1" >
+        
+    </form>
+    
+</div>
+</div>
+{% endblock %}

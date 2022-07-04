@@ -1,0 +1,53 @@
+{% extends 'myapp/base.html'%}
+{% load static %}
+{% block sub_title %}| Products{% endblock sub_title %}
+{% block content %}
+<div class="row mb-5">
+  <div class="col">
+
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+</div>
+<div class="row p-5">
+  <div class="col-5"></div>
+  <div class="col-4">
+  
+    {% if user.is_staff  %}
+      <a href="{% url 'addproduct'  %}" style="float: right" class="btn btn-primary">Add Product</a>
+    {% endif %}
+    
+  </div>
+</div>
+
+<div class="row">
+  {% for productitem in product %}
+  <div class="col-mb-2">
+    <div class="card mt-3 " style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title"> {{productitem.title}}</h5>
+
+        {% for image in productitem.images.all %}
+        {% if forloop.counter == 1 %}
+        <hr>
+        <a href="{% url 'details' productitem.id %}"><img src="{{ image.image.url }}" alt="" width="180"  height="180"  title="" /></a>
+        <hr>
+        {% endif %}
+        {% endfor %}
+
+        <h6 class="card-subtitle"><b>Itemno : </b>{{  productitem.itemno}}</h6><br>
+        <a href="{% url 'details' productitem.id %}" class="btn btn-primary">view</a>
+        {% if user.is_staff  %}
+        <a href="{% url 'editproduct' productitem.id %}" class="btn btn-primary">edit </a>
+        <a href="{% url 'deleteproduct' productitem.id %}" class="btn btn-primary">delete</a>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

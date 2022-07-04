@@ -1,6 +1,6 @@
 from django.contrib import admin
 # Register your models here.
-from .models import CustomUser,ProductImage,Products
+from .models import CustomUser
 
 @admin .register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -9,17 +9,3 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 
 
-class ProductImageAdmin(admin.StackedInline):
-    model = ProductImage
-
-@admin.register(Products)
-class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImageAdmin]
-
-    class Meta:
-       model = Products
-       
-
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    pass
