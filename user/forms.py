@@ -17,6 +17,7 @@ def validatemail(value):
 class InviteUserForm(UserCreationForm):
     """User Creation form  """
     email = forms.EmailField(validators = [validatemail])
+    username  = forms.CharField(widget = forms.HiddenInput(), required = False)
     roles = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),widget = forms.CheckboxSelectMultiple())
     password=forms.CharField(widget=forms.PasswordInput,validators=[validate_password])
     password1 = forms.CharField(widget = forms.HiddenInput(), required = False)
@@ -29,6 +30,8 @@ class InviteUserForm(UserCreationForm):
     def save(self,commit=True):
         user = CustomUser.objects.create(
             email = self.cleaned_data.get('email'),
+            username = str(self.cleaned_data.get('email')).lower()
+
         )
         user.set_password(self.cleaned_data.get('password'))
         my_group = mygroup = ""

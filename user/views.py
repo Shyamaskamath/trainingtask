@@ -15,7 +15,7 @@ class RegisterationFormView(LoginRequiredMixin,generic.CreateView):
     template_name = 'user/register.html'
     form_class = InviteUserForm
     success_message = "user was created successfully"
-    success_url = reverse_lazy("peoplepage")
+    success_url = reverse_lazy("people")
 
 class LoginView(FormView):
     """view for user login"""

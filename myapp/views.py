@@ -28,7 +28,6 @@ class StaffRequiredMixin(AccessMixin):
         return super(StaffRequiredMixin, self).dispatch(request,
                                                         *args, **kwargs)
 
-
 class HomePageView(LoginRequiredMixin, TemplateView):
     """ view for homepage"""
     template_name = 'myapp/homepage.html'
