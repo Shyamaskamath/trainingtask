@@ -130,4 +130,6 @@ class ProductEditView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
                         photo = image.cleaned_data['id']
                         photo.delete()
 
-        return HttpResponseRedirect(product.get_absolute_url())
+            return HttpResponseRedirect(product.get_absolute_url())
+        else:
+            return render(request, 'myapp/productcreate.html', {"productform": form, "formset": formset})
