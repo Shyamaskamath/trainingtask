@@ -9,12 +9,12 @@
     <div class="col">
         <div class="card" style="width: 50rem;height:30rem">
             <div class="card-body">
-                <h5 class="card-title"> {{product.title}}</h5>
+                <h5 class="card-title">{{product.title}}</h5>
                 {% for images in product.images.all %}
                 <a href="{{ images.url }}"><img src="{{ images.image.url }}" alt="" width="200" title="" /></a>
                 {% endfor %}
-                <p><b>Item no:</b>{{product.itemno}}</p>
-                <p><b>Product Details</b>{{product.description}}</p>
+                <p><b>Item no: </b>{{product.itemno}}</p>
+                <p><b>Product Details : </b>{{product.description}}</p>
             </div>
         </div>
 
