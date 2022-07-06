@@ -26,7 +26,7 @@
     <div class="card mt-3 " style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title"> {{productitem.title}}</h5>
-
+     
         {% for image in productitem.images.all %}
         {% if forloop.counter == 1 %}
         <hr>
@@ -34,6 +34,7 @@
         <hr>
         {% endif %}
         {% endfor %}
+      
 
         <h6 class="card-subtitle"><b>Itemno : </b>{{  productitem.itemno}}</h6><br>
         <a href="{% url 'details' productitem.id %}" class="btn btn-primary">view</a>
