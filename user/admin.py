@@ -5,7 +5,7 @@ from .models import CustomUser
 @admin .register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     """ registering and creating view to dispaly  table in admin """
-    list_display = ['email','roles','is_staff','is_admin','is_superuser']
+    list_display = ['id','email','roles','is_staff','is_admin','is_superuser']
 
 
 

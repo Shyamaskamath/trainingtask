@@ -5,8 +5,8 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from myapp.models import Product, ProductImage
 from user.models import CustomUser
-from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
@@ -37,6 +37,7 @@ class LoginSeralizer(serializers.Serializer):
     """ seralizer for user login with email and password"""
     email = serializers.EmailField(max_length=255)
     password = serializers.CharField(max_length=128)
+    
 
 class ProductImageSeralizer(serializers.ModelSerializer):
     """ seralizer for the ProductImage Model"""
@@ -59,9 +60,25 @@ class ProductSeralizer(serializers.HyperlinkedModelSerializer):
             ProductImage.objects.create(product=product,image=imagedata)
         return product
 
-        
+class ProfileUpdateSeralizer(serializers.ModelSerializer):
+    """seralizer for profile update"""
+    email = serializers.EmailField(required=True, 
+	validators=[UniqueValidator(queryset=CustomUser.objects.all())])
+    class Meta:
+        model = CustomUser
+        fields = ('first_name','last_name','email','mobile','profile_photo')
+
+
+   
+
+
+
     
 
+    
+
+
+    
 
     
    

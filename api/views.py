@@ -1,12 +1,14 @@
 from rest_framework.viewsets import ModelViewSet
 from myapp.models import Product
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer,LoginSeralizer,ProductSeralizer,ProductImageSeralizer
+from user.models import CustomUser
+from django.shortcuts import get_object_or_404
+from .serializers import RegisterSerializer,LoginSeralizer,PasswordChangeSeralizer,ProductSeralizer,ProductImageSeralizer,ProfileUpdateSeralizer
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import AllowAny,IsAdminUser,IsAuthenticated
 from django.contrib.auth import authenticate
-from rest_framework import status
+from rest_framework import status,generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin,UpdateModelMixin,RetrieveModelMixin,DestroyModelMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -41,7 +43,7 @@ class LoginAPIView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 class ProductListAPIView(GenericAPIView,ListModelMixin):
-    """view for productlist """
+    """endpoint for product list """
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     serializer_class = ProductSeralizer
@@ -50,7 +52,7 @@ class ProductListAPIView(GenericAPIView,ListModelMixin):
         return self.list(request,*args,**kwargs)
 
 class ProductDetailAPIView(GenericAPIView,RetrieveModelMixin):
-    """view for detailed product view"""
+    """endpoint for detailed view of a product"""
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     serializer_class = ProductSeralizer
@@ -59,7 +61,7 @@ class ProductDetailAPIView(GenericAPIView,RetrieveModelMixin):
         return self.retrieve(request,*args,**kwargs)
 
 class ProductUpdateAPIView(GenericAPIView,UpdateModelMixin):
-    """view to update the productdetails(itemno,description,title) """
+    """endpoint to update the productdetails(itemno,description,title) """
     permission_classes = [IsAdminUser]
     authentication_classes = [JWTAuthentication]
     serializer_class = ProductSeralizer
@@ -68,7 +70,7 @@ class ProductUpdateAPIView(GenericAPIView,UpdateModelMixin):
         return self.update(request,*args,**kwargs)
 
 class ProductDeleteAPIView(GenericAPIView,DestroyModelMixin):
-    """view to deleteproducts"""
+    """endpoint to deleteproduct"""
     permission_classes = [IsAdminUser]
     authentication_classes = [JWTAuthentication]
     queryset = Product.objects.all()
@@ -76,12 +78,31 @@ class ProductDeleteAPIView(GenericAPIView,DestroyModelMixin):
         return self.destroy(request,*args,**kwargs)
 
 class CreateViewset(ModelViewSet):
-    """view  to create new products """
+    """endpoint to create new products """
     permission_classes = [IsAdminUser]
     authentication_classes = [JWTAuthentication]
-    permission_classes = (AllowAny,)
     serializer_class = ProductSeralizer
     queryset= Product.objects.all()
+
+class ProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
+    """endpoint to update user profile"""
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    serializer_class = ProfileUpdateSeralizer
+    def get_object(self):
+        return get_object_or_404(CustomUser, id=self.request.user.id)
+    def patch(self,request,*args,**kwargs):
+        return self.update(request,*args,**kwargs)
+
+
+
+
+
+
+   
+
+
+
 
 
     

@@ -1,5 +1,6 @@
 from django.urls import path
 from . views import  RegistrationAPIView,LoginAPIView
+from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 
 urlpatterns = [
@@ -10,4 +11,5 @@ urlpatterns = [
     path('product/<int:pk>/edit/',views.ProductUpdateAPIView.as_view()),
     path('product/<int:pk>/delete/',views.ProductDeleteAPIView.as_view()),
     path('product/create/',views.CreateViewset.as_view( {"post": "create"})),
+    path('profileupdate/<int:pk>/',views.ProfileUpdateAPIView.as_view(),name="profileupdate"),
 ]
