@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import ProductForm,ProductEditForm, ImageFormSet
+from .forms import ProductForm,ProductEditForm, ImageFormSet,ProfileUpdateForm
 from .models import ProductImage, Product
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -12,6 +12,7 @@ from user.models import CustomUser
 from django.conf import settings
 from django.contrib import messages
 from django.views import View
+
 # Create your views here.
 
 class StaffRequiredMixin(AccessMixin):
@@ -27,7 +28,6 @@ class StaffRequiredMixin(AccessMixin):
             return redirect(settings.LOGIN_URL)
         return super(StaffRequiredMixin, self).dispatch(request,
                                                         *args, **kwargs)
-
 
 class HomePageView(LoginRequiredMixin, TemplateView):
     """ view for homepage"""
@@ -66,6 +66,16 @@ class DetailProductView(LoginRequiredMixin, DetailView):
     context_object_name = "product"
     model = Product
     template_name = "myapp/detail.html"
+
+class ProfileUpdateView(LoginRequiredMixin,UpdateView):
+    template_name = "myapp/profileupdate.html"
+    form_class = ProfileUpdateForm
+    model = CustomUser
+    success_url = reverse_lazy('productlist')
+
+
+
+    
 
 
 class AddProductView(LoginRequiredMixin, StaffRequiredMixin, CreateView):

@@ -1,4 +1,7 @@
-from django import forms 
+import email
+from pyexpat import model
+from django import forms
+from user.models import CustomUser 
 from .models import Product,ProductImage
 from django.forms import modelformset_factory
 from django.core.exceptions import ValidationError
@@ -21,6 +24,11 @@ class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('first_name','last_name','email','mobile','profile_photo')
 
 """formset  to get 3 image per product """
 ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=3,max_num=3,min_num=0)
