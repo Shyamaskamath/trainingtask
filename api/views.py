@@ -1,26 +1,26 @@
 from rest_framework.viewsets import ModelViewSet
-from myapp.models import Product
+from myapp.models import Product, ProductImage
 from rest_framework.views import APIView
 from user.models import CustomUser
 from django.shortcuts import get_object_or_404
-from .serializers import RegisterSerializer,LoginSeralizer,PasswordChangeSeralizer,ProductSeralizer,ProductImageSeralizer,ProfileUpdateSeralizer
+from .serializers import RegisterSerializer,LoginSeralizer,ProductSeralizer,ProductImageSeralizer,ProfileUpdateSeralizer
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import AllowAny,IsAdminUser,IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework import status,generics
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin,UpdateModelMixin,RetrieveModelMixin,DestroyModelMixin
+from rest_framework.mixins import ListModelMixin,RetrieveModelMixin,DestroyModelMixin,UpdateModelMixin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-class RegistrationAPIView(generics.CreateAPIView):
-  """view for user registration """
+class UserRegistrationAPI(generics.CreateAPIView):
+  """endpoint for user registration """
   permission_classes = (AllowAny,)
   serializer_class = RegisterSerializer
     
-class LoginAPIView(APIView):
-    """view for login with email and password """
+class LoginAPI(APIView):
+    """endpoint for login with email and password """
     permission_classes = (AllowAny,)
     serializer_class = LoginSeralizer
 
@@ -42,7 +42,7 @@ class LoginAPIView(APIView):
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-class ProductListAPIView(GenericAPIView,ListModelMixin):
+class ProductListAPI(GenericAPIView,ListModelMixin):
     """endpoint for product list """
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -51,7 +51,7 @@ class ProductListAPIView(GenericAPIView,ListModelMixin):
     def get(self,request,*args,**kwargs):
         return self.list(request,*args,**kwargs)
 
-class ProductDetailAPIView(GenericAPIView,RetrieveModelMixin):
+class DetailProductListAPI(GenericAPIView,RetrieveModelMixin):
     """endpoint for detailed view of a product"""
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -60,31 +60,52 @@ class ProductDetailAPIView(GenericAPIView,RetrieveModelMixin):
     def get(self,request,*args,**kwargs):
         return self.retrieve(request,*args,**kwargs)
 
-class ProductUpdateAPIView(GenericAPIView,UpdateModelMixin):
-    """endpoint to update the productdetails(itemno,description,title) """
-    permission_classes = [IsAdminUser]
-    authentication_classes = [JWTAuthentication]
-    serializer_class = ProductSeralizer
-    queryset = Product.objects.all()
-    def put(self,request,*args,**kwargs):
-        return self.update(request,*args,**kwargs)
-
-class ProductDeleteAPIView(GenericAPIView,DestroyModelMixin):
+class DeleteProductAPI(GenericAPIView,DestroyModelMixin):
     """endpoint to deleteproduct"""
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated,IsAdminUser]
     authentication_classes = [JWTAuthentication]
     queryset = Product.objects.all()
     def delete(self,request,*args,**kwargs):
         return self.destroy(request,*args,**kwargs)
 
-class CreateViewset(ModelViewSet):
+class ProductCreateAPI(ModelViewSet):
     """endpoint to create new products """
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated,IsAdminUser]
     authentication_classes = [JWTAuthentication]
     serializer_class = ProductSeralizer
     queryset= Product.objects.all()
 
-class ProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
+
+
+class ProductUpdateAPI(GenericAPIView,UpdateModelMixin):
+    """endpoint to update product details"""
+    permission_classes = [IsAuthenticated,IsAdminUser]
+    authentication_classes = [JWTAuthentication]
+    serializer_class = ProductSeralizer
+    queryset= Product.objects.all()
+    def put(self,request,pk):
+        productobject = Product.objects.get(id=pk)
+        list_deleting_ids = request.data['list']
+        ids = list_deleting_ids.split(',')
+        for i in ids:
+                deleting_id = int(i)
+                try:
+                    productimageobject = ProductImage.objects.get(id=deleting_id)
+                    if productimageobject.product == productobject:
+                        productimageobject.delete()
+                except:
+                    pass
+                else:
+                    pass
+        imagess = request.data['image']
+        if imagess:
+            image = request.data.pop('image')
+            for imagedata in image:
+                ProductImage.objects.create(product=productobject,image=imagedata)
+        
+        return self.update(request,id=pk)
+
+class ProfileUpdateAPI(generics.RetrieveUpdateAPIView):
     """endpoint to update user profile"""
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
