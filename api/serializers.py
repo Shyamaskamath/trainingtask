@@ -59,6 +59,7 @@ class ProductSeralizer(serializers.ModelSerializer):
             ProductImage.objects.create(product=product,image=imagedata)
         return product
 
+
      
 
 class ProfileUpdateSeralizer(serializers.ModelSerializer):

@@ -75,22 +75,29 @@ class ProductCreateAPI(ModelViewSet):
     serializer_class = ProductSeralizer
     queryset= Product.objects.all()
 
-class ProductUpdateAPI(GenericAPIView,UpdateModelMixin): 
+class ProductUpdateAPI(generics.RetrieveUpdateAPIView): 
     """endpoint to update product details""" 
     permission_classes = [IsAuthenticated,IsAdminUser] 
     authentication_classes = [JWTAuthentication] 
     serializer_class = ProductSeralizer 
     queryset= Product.objects.all() 
-    def put(self,request,pk): 
-        productobject = Product.objects.get(id=pk) 
+    def put(self, request, *args, **kwargs):
+        productobject = self.get_object()
+        serializer = ProductSeralizer(productobject, data=request.data,
+                                            context={'request': request})
         list_deleting_ids = request.data['list'].split(',') 
         ProductImage.objects.filter(id__in=list_deleting_ids, product=productobject).delete()
-        imagess = request.data['image'] 
+        imagess = request.data['image']
         if imagess: 
-            image = request.data.pop('image') 
+            image = request.data.pop('image')
             ProductImage.objects.bulk_create([ProductImage(product=productobject,image= imagedata)  
             for imagedata in image ]) 
-        return self.update(request,id=pk) 
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class ProfileUpdateAPI(generics.RetrieveUpdateAPIView):
