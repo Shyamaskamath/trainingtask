@@ -66,8 +66,6 @@ class ProfileUpdateSeralizer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('first_name','last_name','email','mobile','profile_photo')
-    def update(self,instance,validate_data):
-        print(instance)
     
     
 
