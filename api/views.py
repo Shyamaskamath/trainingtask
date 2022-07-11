@@ -85,25 +85,13 @@ class ProductUpdateAPI(GenericAPIView,UpdateModelMixin):
     queryset= Product.objects.all()
     def put(self,request,pk):
         productobject = Product.objects.get(id=pk)
-        list_deleting_ids = request.data['list']
-        ids = list_deleting_ids.split(',')
-        for i in ids:
-                deleting_id = int(i)
-                try:
-                    productimageobject = ProductImage.objects.get(id=deleting_id)
-                    if productimageobject.product == productobject:
-                        productimageobject.delete()
-                except:
-                    pass
-                else:
-                    pass
-        imagess = request.data['image']
-        if imagess:
-            image = request.data.pop('image')
-            for imagedata in image:
+        list_deleting_ids = request.data['list'].split(',')
+        ProductImage.objects.filter(id__in=list_deleting_ids, product=productobject).delete()
+        if request.data['image']:
+            for imagedata in request.data.pop('image'):
                 ProductImage.objects.create(product=productobject,image=imagedata)
-        
         return self.update(request,id=pk)
+
 
 class ProfileUpdateAPI(generics.RetrieveUpdateAPIView):
     """endpoint to update user profile"""
