@@ -74,7 +74,7 @@ class ProductCreateAPI(ModelViewSet):
     authentication_classes = [JWTAuthentication]
     serializer_class = ProductSeralizer
     queryset= Product.objects.all()
-    
+
 class ProductUpdateAPI(GenericAPIView,UpdateModelMixin): 
     """endpoint to update product details""" 
     permission_classes = [IsAuthenticated,IsAdminUser] 
@@ -91,7 +91,7 @@ class ProductUpdateAPI(GenericAPIView,UpdateModelMixin):
             ProductImage.objects.bulk_create([ProductImage(product=productobject,image= imagedata)  
             for imagedata in image ]) 
         return self.update(request,id=pk) 
-        
+     
 class ProfileUpdateAPI(generics.RetrieveUpdateAPIView):
     """endpoint to update user profile"""
     permission_classes = [IsAuthenticated]

@@ -1,4 +1,4 @@
-from email.policy import default
+from itertools import product
 from rest_framework import serializers
 from user.models import CustomUser
 from myapp.models import ProductImage,Product
@@ -49,15 +49,18 @@ class ProductSeralizer(serializers.ModelSerializer):
         model = Product
         fields = ('id','title','itemno','description','images')
 
-
-    def create(self, validated_data):
-        imagedata =self.context.get('view').request.FILES
-        product=Product.objects.create(title=validated_data.get('title', 'no-title'),
-        itemno=validated_data.get('itemno', 'no-itemno'),
-        description=validated_data.get('description', 'no-description'))
-        for imagedata in imagedata.values():
-            ProductImage.objects.create(product=product,image=imagedata)
-        return product
+    def create(self,validated_data):
+        image_data = self.context.get('request').data.pop('images')
+        productobject = Product.objects.create(
+            title = validated_data.get('title','no-title'),
+            itemno = validated_data.get('itemno','no-itemno'),
+            description = validated_data.get('description','no-description'))
+        if image_data:
+            ProductImage.objects.bulk_create([ProductImage
+                   (image=image,product=productobject) for image in image_data
+                ])       
+        return productobject
+    
 
 class ProfileUpdateSeralizer(serializers.ModelSerializer):
     """seralizer for profile update"""
@@ -67,11 +70,4 @@ class ProfileUpdateSeralizer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('first_name','last_name','email','mobile','profile_photo')
     
-    
-
-
-
-
-
-
-
+ 
