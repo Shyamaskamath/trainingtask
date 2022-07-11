@@ -75,22 +75,22 @@ class ProductCreateAPI(ModelViewSet):
     serializer_class = ProductSeralizer
     queryset= Product.objects.all()
 
-
-
-class ProductUpdateAPI(GenericAPIView,UpdateModelMixin):
-    """endpoint to update product details"""
-    permission_classes = [IsAuthenticated,IsAdminUser]
-    authentication_classes = [JWTAuthentication]
-    serializer_class = ProductSeralizer
-    queryset= Product.objects.all()
-    def put(self,request,pk):
-        productobject = Product.objects.get(id=pk)
-        list_deleting_ids = request.data['list'].split(',')
+class ProductUpdateAPI(GenericAPIView,UpdateModelMixin): 
+    """endpoint to update product details""" 
+    permission_classes = [IsAuthenticated,IsAdminUser] 
+    authentication_classes = [JWTAuthentication] 
+    serializer_class = ProductSeralizer 
+    queryset= Product.objects.all() 
+    def put(self,request,pk): 
+        productobject = Product.objects.get(id=pk) 
+        list_deleting_ids = request.data['list'].split(',') 
         ProductImage.objects.filter(id__in=list_deleting_ids, product=productobject).delete()
-        if request.data['image']:
-            for imagedata in request.data.pop('image'):
-                ProductImage.objects.create(product=productobject,image=imagedata)
-        return self.update(request,id=pk)
+        imagess = request.data['image'] 
+        if imagess: 
+            image = request.data.pop('image') 
+            ProductImage.objects.bulk_create([ProductImage(product=productobject,image= imagedata)  
+            for imagedata in image ]) 
+        return self.update(request,id=pk) 
 
 
 class ProfileUpdateAPI(generics.RetrieveUpdateAPIView):

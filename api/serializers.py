@@ -49,6 +49,7 @@ class ProductSeralizer(serializers.ModelSerializer):
         model = Product
         fields = ('id','title','itemno','description','images')
 
+
     def create(self, validated_data):
         imagedata =self.context.get('view').request.FILES
         product=Product.objects.create(title=validated_data.get('title', 'no-title'),
@@ -57,7 +58,8 @@ class ProductSeralizer(serializers.ModelSerializer):
         for imagedata in imagedata.values():
             ProductImage.objects.create(product=product,image=imagedata)
         return product
-   
+
+     
 
 class ProfileUpdateSeralizer(serializers.ModelSerializer):
     """seralizer for profile update"""
