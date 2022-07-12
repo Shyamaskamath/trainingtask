@@ -21,7 +21,7 @@ class RegisterSerializer(serializers.ModelSerializer):
              raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
     def create(self, validated_data):
-        user = CustomUser.objects.create(
+        user=CustomUser.objects.create(
             email=validated_data['email'],
             )
         user.set_password(validated_data['password'])
@@ -33,12 +33,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class LoginSeralizer(serializers.Serializer):
     """ seralizer for user login with email and password"""
-    email = serializers.EmailField(max_length=255)
-    password = serializers.CharField(max_length=128)
+    email=serializers.EmailField(max_length=255)
+    password=serializers.CharField(max_length=128)
 
 class ProductImageSeralizer(serializers.ModelSerializer):
+    """seralizer for the ProductImage """
     id = serializers.IntegerField(required=False)
     class Meta:
+        """ Documentation for productimage """
         model = ProductImage
         fields = ('id','image')
     
@@ -50,11 +52,11 @@ class ProductSeralizer(serializers.ModelSerializer):
         fields = ('id','title','itemno','description','images')
 
     def create(self,validated_data):
-        image_data = self.context.get('request').data.pop('images')
+        image_data = self.context.get('request').data.pop('image')
         productobject = Product.objects.create(
             title = validated_data.get('title','no-title'),
-            itemno = validated_data.get('itemno','no-itemno'),
-            description = validated_data.get('description','no-description'))
+            itemno=validated_data.get('itemno','no-itemno'),
+            description=validated_data.get('description','no-description'))
         if image_data:
             ProductImage.objects.bulk_create([ProductImage
                    (image=image,product=productobject) for image in image_data
@@ -64,7 +66,7 @@ class ProductSeralizer(serializers.ModelSerializer):
 
 class ProfileUpdateSeralizer(serializers.ModelSerializer):
     """seralizer for profile update"""
-    email = serializers.EmailField(required=True, 
+    email=serializers.EmailField(required=True, 
 	validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     class Meta:
         model = CustomUser
