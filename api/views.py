@@ -85,9 +85,9 @@ class ProductUpdateAPI(GenericAPIView,UpdateModelMixin):
         productobject = Product.objects.get(id=pk) 
         list_deleting_ids = request.data['list'].split(',') 
         ProductImage.objects.filter(id__in=list_deleting_ids, product=productobject).delete()
-        imagess = request.data['image'] 
+        imagess = request.data['image']
         if imagess: 
-            image = request.data.pop('image') 
+            image = request.data.pop('image')
             ProductImage.objects.bulk_create([ProductImage(product=productobject,image= imagedata)  
             for imagedata in image ]) 
         return self.update(request,id=pk) 
