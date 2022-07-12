@@ -129,6 +129,7 @@ class ProductEditView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         if form.is_valid() and formset.is_valid():
             form.save()
             for image in formset.forms:
+                print(formset.forms)
                 # for adding newimage or updating images
                 if image.is_valid():
                     if image.cleaned_data.get('image'):

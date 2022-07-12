@@ -9,7 +9,12 @@
     </div>
 <div class="row mt-5  pe-4">
         <div class="col-4 p-5">
-                <img class="img-thumbnail" src="{{ user.profile_photo.url }}" alt="profile-image" width="180px height=100px">
+            {% if user.profile_photo %}
+                 <img class="img-thumbnail" src="{{ user.profile_photo.url }}" alt="profile-image" width="180px height=100px">
+            {% else %}
+                <img src="{% static 'images/default.jpg' %}"  width="200" height="150">
+
+            {% endif %}
         </div>
     <div class="col-6" >
         <form method="POST"   enctype="multipart/form-data">
@@ -22,57 +27,6 @@
     </div>
 </div>
 </div>
-
-
-     
-
-      
-       
-    
-
-    
-<!--     
-    <div class="row my-4">
-        <div class="col-md-4"></div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    Customer Detail Page
-                </div>
-                <div class="row p-3">
-                    <div class="col-md-8">
-                        <table class="table table-borderless">
-                            <thead>
-                                <span class="h4">Porfile Information</span class="h4">
-                                <hr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Name</th>
-                                    <td>{{ user }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Email</th>
-                                    <td>{{ user.email }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Phone</th>
-                                    <td>{{ user.first_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Address</th>
-                                    <td>{{ user.last_name }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-4">
-                        <img class="img-thumbnail" src="{{ user.profile_photo.url }}" alt="profile-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
 
 {% endblock %}
